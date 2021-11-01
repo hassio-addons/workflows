@@ -115,3 +115,4 @@ SOFTWARE.
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [reddit]: https://reddit.com/r/homeassistant
+[repository]: https://github.com/hassio-addons/repository
