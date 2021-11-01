@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: ⤵️ Download latest labels definitions
         run: |
-          curl -v -s --retry 5 \
-            "https://raw.githubusercontent.com/hassio-addons/workflows/main/.github/labels.yml"
+          curl -s --retry 5 \
+            "https://raw.githubusercontent.com/hassio-addons/workflows/main/.github/labels.yml" \
             > labels.yml
       - name: 🚀 Run Label Syncer
         uses: micnncim/action-label-syncer@v1.3.0
