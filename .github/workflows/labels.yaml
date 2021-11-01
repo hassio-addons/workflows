@@ -11,6 +11,9 @@ on:
   schedule:
     - cron: "34 5 * * *"
   workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
   workflow_dispatch:
 
 jobs:
