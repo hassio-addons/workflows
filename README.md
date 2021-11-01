@@ -110,7 +110,7 @@ SOFTWARE.
 [github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
 [github-sponsors]: https://github.com/sponsors/frenck
 [issue]: https://github.com/hassio-addons/workflows/issues
-[license-shield]: https://img.shields.io/github/license/workflows/workflows.svg
+[license-shield]: https://img.shields.io/github/license/hassio-addons/workflows.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
