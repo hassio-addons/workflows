@@ -105,8 +105,8 @@ SOFTWARE.
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/?u=frenck
 [frenck]: https://github.com/frenck
-[github-actions-shield]: https://github.com/hassio-addons/workflows/workflows/CI/badge.svg
-[github-actions]: https://github.com/hassio-addons/workflows/actions
+[github-actions-shield]: https://github.com/hassio-addons/workflows/actions/workflows/workflows-ci.yaml/badge.svg
+[github-actions]: https://github.com/hassio-addons/workflows/actions/workflows/workflows-ci.yaml
 [github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
 [github-sponsors]: https://github.com/sponsors/frenck
 [issue]: https://github.com/hassio-addons/workflows/issues
