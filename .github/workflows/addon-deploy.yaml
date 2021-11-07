@@ -4,6 +4,11 @@ name: Deploy
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
     secrets:
       DISPATCH_TOKEN:
         required: true
@@ -26,7 +31,7 @@ jobs:
       description: ${{ steps.information.outputs.description }}
       environment: ${{ steps.release.outputs.environment }}
       name: ${{ steps.information.outputs.name }}
-      slug: ${{ steps.information.outputs.slug }}
+      slug: ${{ steps.override.outputs.slug }}
       target: ${{ steps.information.outputs.target }}
       version: ${{ steps.release.outputs.version }}
     steps:
@@ -35,6 +40,14 @@ jobs:
       - name: 🚀 Run add-on information action
         id: information
         uses: frenck/action-addon-information@v1.3.0
+      - name: 🚀 Process possible slug override
+        id: override
+        run: |
+          slug="${{ steps.information.outputs.slug }}"
+          if [[ ! -z "${{ inputs.slug }}" ]]; then
+            slug="${{ inputs.slug }}"
+          fi
+          echo "::set-output name=slug::$slug"
       - name: ℹ️ Gather version and environment
         id: release
         run: |

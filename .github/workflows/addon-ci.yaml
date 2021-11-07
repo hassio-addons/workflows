@@ -4,6 +4,11 @@ name: CI
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
     secrets:
       GITHUB_TOKEN:
         required: true
@@ -17,7 +22,7 @@ jobs:
       build: ${{ steps.information.outputs.build }}
       description: ${{ steps.information.outputs.description }}
       name: ${{ steps.information.outputs.name }}
-      slug: ${{ steps.information.outputs.slug }}
+      slug: ${{ steps.override.outputs.slug }}
       target: ${{ steps.information.outputs.target }}
     steps:
       - name: ⤵️ Check out code from GitHub
@@ -25,6 +30,15 @@ jobs:
       - name: 🚀 Run add-on information action
         id: information
         uses: frenck/action-addon-information@v1.3.0
+      - name: 🚀 Process possible slug override
+        id: override
+        run: |
+          slug="${{ steps.information.outputs.slug }}"
+          if [[ ! -z "${{ inputs.slug }}" ]]; then
+            slug="${{ inputs.slug }}"
+          fi
+          echo "::set-output name=slug::$slug"
+
 
   lint-addon:
     name: Lint Add-on
