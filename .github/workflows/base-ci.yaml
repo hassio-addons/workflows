@@ -4,9 +4,6 @@ name: CI
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   information:

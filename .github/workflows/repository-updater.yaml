@@ -5,8 +5,6 @@ name: Repository Updater
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
-        required: true
       UPDATER_TOKEN:
         required: true
 
