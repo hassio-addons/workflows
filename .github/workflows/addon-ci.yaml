@@ -9,9 +9,6 @@ on:
         description: Overrides the detected slug
         required: false
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   information:
@@ -38,7 +35,6 @@ jobs:
             slug="${{ inputs.slug }}"
           fi
           echo "::set-output name=slug::$slug"
-
 
   lint-addon:
     name: Lint Add-on
