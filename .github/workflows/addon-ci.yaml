@@ -36,7 +36,6 @@ jobs:
           fi
           echo "::set-output name=slug::$slug"
 
-
   lint-addon:
     name: Lint Add-on
     needs:
