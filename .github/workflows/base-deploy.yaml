@@ -132,8 +132,7 @@ jobs:
             BUILD_REPOSITORY=${{ github.repository }}
             BUILD_VERSION=${{ needs.information.outputs.version }}
       - name: 🔏 Notarize
-        # Only sign for the community add-ons repository
-        if: needs.information.outputs.signer == 'codenotary@frenck.dev'
+        if: needs.information.outputs.signer != 'null'
         # yamllint disable rule:line-length
         run: |
           if ! cas authenticate \
