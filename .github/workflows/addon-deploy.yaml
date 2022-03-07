@@ -10,6 +10,8 @@ on:
         required: false
         type: string
     secrets:
+      CAS_API_KEY:
+        required: false
       DISPATCH_TOKEN:
         required: true
 

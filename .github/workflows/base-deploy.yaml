@@ -6,7 +6,7 @@ on:
   workflow_call:
     secrets:
       CAS_API_KEY:
-        required: true
+        required: false
 
 jobs:
   information:
