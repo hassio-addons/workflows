@@ -4,6 +4,9 @@ name: Deploy
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
+    secrets:
+      CAS_API_KEY:
+        required: true
 
 jobs:
   information:
@@ -19,6 +22,7 @@ jobs:
       architectures: ${{ steps.information.outputs.architectures }}
       build: ${{ steps.information.outputs.build }}
       environment: ${{ steps.release.outputs.environment }}
+      signer: ${{ steps.information.outputs.codenotary_signer }}
       slug: ${{ steps.information.outputs.slug }}
       target: ${{ steps.information.outputs.target }}
       version: ${{ steps.release.outputs.version }}
@@ -27,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
       - name: 🚀 Run add-on information action
         id: information
-        uses: frenck/action-addon-information@v1.3.1
+        uses: frenck/action-addon-information@v1.4.0
       - name: ℹ️ Gather version and environment
         id: release
         run: |
@@ -75,8 +79,8 @@ jobs:
         uses: docker/setup-qemu-action@v1.2.0
       - name: 🏗 Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
-      - name: 🏗 Set up CodeNotary
-        run: bash <(curl https://getvcn.codenotary.com -L)
+      - name: 🏗 Set up Codenotary Community Attestation Service (CAS)
+        uses: frenck/action-setup-cas@v0.1.0
       - name: ℹ️ Compose build flags
         id: flags
         run: |
@@ -127,6 +131,24 @@ jobs:
             BUILD_REF=${{ github.sha }}
             BUILD_REPOSITORY=${{ github.repository }}
             BUILD_VERSION=${{ needs.information.outputs.version }}
+      - name: 🔏 Notarize
+        # Only sign for the community add-ons repository
+        if: needs.information.outputs.signer == 'codenotary@frenck.dev'
+        # yamllint disable rule:line-length
+        run: |
+          if ! cas authenticate \
+            --signerID ${{ needs.information.outputs.signer }} \
+            --silent \
+            "docker://ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}";
+          then
+            cas notarize \
+              --bom \
+              --ci-attr \
+              --name "${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}" \
+              "docker://ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+          fi
+        env:
+          CAS_API_KEY: ${{ secrets.CAS_API_KEY }}
       - name: 🚀 Push
         # yamllint disable rule:line-length
         run: |
