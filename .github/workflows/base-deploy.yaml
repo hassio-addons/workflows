@@ -155,7 +155,9 @@ jobs:
 
   manifest:
     name: 👷 Build & Deploy Multi Arch Manifest
-    needs: deploy
+    needs: 
+      - information
+      - deploy
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
