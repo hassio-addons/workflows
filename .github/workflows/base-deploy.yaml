@@ -173,7 +173,7 @@ jobs:
           declare -a images
 
           for architecture in $( \
-            echo "${{ needs.information.outputs.architectures }}" \
+            echo '${{ needs.information.outputs.architectures }}' \
             | jq --raw-output '.[]'
           ); do
             images+=("ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${architecture}:${{ needs.information.outputs.version }}")
