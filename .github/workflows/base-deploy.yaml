@@ -114,14 +114,14 @@ jobs:
           load: true
           # yamllint disable rule:line-length
           tags: |
-            ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
-            ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
           # yamllint enable rule:line-length
           context: ${{ needs.information.outputs.target }}
           file: ${{ needs.information.outputs.target }}/Dockerfile
           cache-from: |
             type=local,src=/tmp/.docker-cache
-            ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache
           platforms: ${{ steps.flags.outputs.platform }}
           build-args: |
@@ -138,20 +138,20 @@ jobs:
           if ! cas authenticate \
             --signerID "${{ needs.information.outputs.signer }}" \
             --silent \
-            "docker://ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}";
+            "docker://ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}";
           then
             cas notarize \
               --api-key="${{ secrets.CAS_API_KEY }}" \
               --name "${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}" \
-              "docker://ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+              "docker://ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
           fi
       - name: 🚀 Push
         # yamllint disable rule:line-length
         run: |
           docker push \
-            "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}"
+            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}"
           docker push \
-            "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
 
   manifest:
     name: 👷 Build & Deploy Multi Arch Manifest
@@ -174,15 +174,15 @@ jobs:
             echo '${{ needs.information.outputs.architectures }}' \
             | jq --raw-output '.[]'
           ); do
-            images+=("ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}/${architecture}:${{ needs.information.outputs.version }}")
+            images+=("ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${architecture}:${{ needs.information.outputs.version }}")
           done
 
           docker manifest create \
-             "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.environment }}" \
+             "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.environment }}" \
              "${images[@]}"
 
           docker manifest create \
-             "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.version }}" \
+             "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.version }}" \
              "${images[@]}"
 
       - name: 🏗  Login to GitHub Container Registry
@@ -196,6 +196,6 @@ jobs:
         # yamllint disable rule:line-length
         run: |
           docker manifest push \
-            "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.environment }}"
+            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.environment }}"
           docker manifest push \
-            "ghcr.io/hassio-addons/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.version }}"
+            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}:${{ needs.information.outputs.version }}"
