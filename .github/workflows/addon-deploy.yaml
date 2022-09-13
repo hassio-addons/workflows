@@ -77,6 +77,10 @@ jobs:
       matrix:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
     steps:
+      - id: repositoryowner
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ github.repository_owner }}
       - name: 🔂 Wait for other runs to complete
         uses: softprops/turnstyle@v1
         env:
@@ -139,14 +143,14 @@ jobs:
           load: true
           # yamllint disable rule:line-length
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
-            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
+            ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
+            ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
           # yamllint enable rule:line-length
           context: ${{ needs.information.outputs.target }}
           file: ${{ needs.information.outputs.target }}/Dockerfile
           cache-from: |
             type=local,src=/tmp/.docker-cache
-            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
+            ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
           platforms: ${{ steps.flags.outputs.platform }}
           build-args: |
@@ -165,12 +169,12 @@ jobs:
           if ! cas authenticate \
             --signerID "${{ needs.information.outputs.signer }}" \
             --silent \
-            "docker://ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}";
+            "docker://ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}";
           then
             cas notarize \
               --api-key="${{ secrets.CAS_API_KEY }}" \
               --name "${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}" \
-              "docker://ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+              "docker://ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
           fi
       # This ugly bit is necessary, or our cache will grow forever...
       # Well until we hit GitHub's limit of 5GB :)
@@ -184,9 +188,9 @@ jobs:
         # yamllint disable rule:line-length
         run: |
           docker push \
-            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}"
+            "ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}"
           docker push \
-            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+            "ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
 
   publish-edge:
     name: 📢 Publish to edge repository

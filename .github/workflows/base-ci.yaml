@@ -152,6 +152,10 @@ jobs:
             echo "::error ::Could not determine platform for architecture ${{ matrix.architecture }}"
             exit 1
           fi
+      - id: repositoryowner
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ github.repository_owner }}
       - name: 🚀 Build
         uses: docker/build-push-action@v3.1.1
         with:
@@ -160,7 +164,7 @@ jobs:
           file: ${{ needs.information.outputs.target }}/Dockerfile
           cache-from: |
             type=local,src=/tmp/.docker-cache
-            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
+            ghcr.io/${{ steps.repositoryowner.outputs.lowercase }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache
           platforms: ${{ steps.flags.outputs.platform }}
           build-args: |
