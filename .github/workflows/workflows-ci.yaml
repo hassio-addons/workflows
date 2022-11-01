@@ -12,15 +12,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint-markdown:
-    name: MarkdownLint
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3
-      - name: 🚀 Run mdl
-        uses: actionshub/markdownlint@2.0.2
-
   lint-shellcheck:
     name: Shellcheck
     runs-on: ubuntu-latest
