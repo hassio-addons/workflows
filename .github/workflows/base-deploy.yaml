@@ -48,8 +48,8 @@ jobs:
             fi
           fi
 
-          echo "::set-output name=environment::${environment}"
-          echo "::set-output name=version::${version}"
+          echo "environment=${environment}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: 👷 Build & Deploy ${{ matrix.architecture }}
@@ -84,20 +84,20 @@ jobs:
       - name: ℹ️ Compose build flags
         id: flags
         run: |
-          echo "::set-output name=date::$(date +"%Y-%m-%dT%H:%M:%SZ")"
+          echo "date=$(date +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
           from=$(yq --no-colors eval ".build_from.${{ matrix.architecture }}" "${{ needs.information.outputs.build }}")
-          echo "::set-output name=from::${from}"
+          echo "from=${from}" >> "$GITHUB_OUTPUT"
 
           if [[ "${{ matrix.architecture}}" = "amd64" ]]; then
-            echo "::set-output name=platform::linux/amd64"
+            echo "platform=linux/amd64" >> "$GITHUB_OUTPUT"
           elif [[ "${{ matrix.architecture }}" = "i386" ]]; then
-            echo "::set-output name=platform::linux/386"
+            echo "platform=linux/386" >> "$GITHUB_OUTPUT"
           elif [[ "${{ matrix.architecture }}" = "armhf" ]]; then
-            echo "::set-output name=platform::linux/arm/v6"
+            echo "platform=linux/arm/v6" >> "$GITHUB_OUTPUT"
           elif [[ "${{ matrix.architecture }}" = "armv7" ]]; then
-            echo "::set-output name=platform::linux/arm/v7"
+            echo "platform=linux/arm/v7" >> "$GITHUB_OUTPUT"
           elif [[ "${{ matrix.architecture }}" = "aarch64" ]]; then
-            echo "::set-output name=platform::linux/arm64/v8"
+            echo "platform=linux/arm64/v8" >> "$GITHUB_OUTPUT"
           else
             echo "::error ::Could not determine platform for architecture ${{ matrix.architecture }}"
             exit 1
