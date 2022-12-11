@@ -9,6 +9,18 @@ on:
         description: Overrides the detected slug
         required: false
         type: string
+      repository:
+        default: repository
+        description: The name of your stable repository
+        type: string
+      repository-edge:
+        default: repository-edge
+        description: The name of your edge repository
+        type: string
+      repository-beta:
+        default: repository-beta
+        description: The name of your beta repository
+        type: string
     secrets:
       CAS_API_KEY:
         required: false
@@ -202,7 +214,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2.1.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ github.repository_owner }}/repository-edge
+          repository: ${{ github.repository_owner }}/${{ inputs.repository-edge }}
           event-type: update
           client-payload: >
             {
@@ -228,7 +240,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2.1.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ github.repository_owner }}/repository-beta
+          repository: ${{ github.repository_owner }}/${{ inputs.repository-beta }}
           event-type: update
           client-payload: >
             {
@@ -252,7 +264,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2.1.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ github.repository_owner }}/repository
+          repository: ${{ github.repository_owner }}/${{ inputs.repository }}
           event-type: update
           client-payload: >
             {
