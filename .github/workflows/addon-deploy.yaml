@@ -11,15 +11,15 @@ on:
         type: string
       repository:
         default: repository
-        description: The name of your stable repository
+        description: The name of the stable repository
         type: string
-      repository-edge:
+      repository_edge:
         default: repository-edge
-        description: The name of your edge repository
+        description: The name of the edge repository
         type: string
-      repository-beta:
+      repository_beta:
         default: repository-beta
-        description: The name of your beta repository
+        description: The name of the beta repository
         type: string
     secrets:
       CAS_API_KEY:
@@ -214,7 +214,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2.1.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ github.repository_owner }}/${{ inputs.repository-edge }}
+          repository: ${{ github.repository_owner }}/${{ inputs.repository_edge }}
           event-type: update
           client-payload: >
             {
@@ -240,7 +240,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2.1.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ github.repository_owner }}/${{ inputs.repository-beta }}
+          repository: ${{ github.repository_owner }}/${{ inputs.repository_beta }}
           event-type: update
           client-payload: >
             {
