@@ -10,16 +10,19 @@ on:
         required: false
         type: string
       repository:
-        default: repository
+        default: 'repository'
         description: The name of the stable repository
+        required: false
         type: string
       repository_edge:
-        default: repository-edge
+        default: 'repository-edge'
         description: The name of the edge repository
+        required: false
         type: string
       repository_beta:
-        default: repository-beta
+        default: 'repository-beta'
         description: The name of the beta repository
+        required: false
         type: string
     secrets:
       CAS_API_KEY:
