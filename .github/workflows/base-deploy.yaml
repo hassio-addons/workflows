@@ -8,6 +8,9 @@ on:
       CAS_API_KEY:
         required: false
 
+concurrency:
+  group: queue
+
 jobs:
   information:
     if: |
@@ -59,10 +62,6 @@ jobs:
       matrix:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
     steps:
-      - name: 🔂 Wait for other runs to complete
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@v3
       - name: 🏗 Set up build cache

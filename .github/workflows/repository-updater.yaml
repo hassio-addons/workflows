@@ -8,17 +8,14 @@ on:
       UPDATER_TOKEN:
         required: true
 
+concurrency:
+  group: queue
+
 jobs:
   publish:
     name: Publish add-on update
     runs-on: ubuntu-latest
     steps:
-      - name: 🔂 Wait for other runs to complete
-        uses: softprops/turnstyle@v1
-        with:
-          continue-after-seconds: 1200
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 🚀 Run Repository Updater
         uses: hassio-addons/repository-updater@v1.2.5
         with:
