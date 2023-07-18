@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 Run Repository Updater
-        uses: hassio-addons/repository-updater@v1.2.5
+        uses: hassio-addons/repository-updater@v1.3.0
         with:
           addon: ${{ github.event.client_payload.addon }}
           repository: ${{ github.repository }}
