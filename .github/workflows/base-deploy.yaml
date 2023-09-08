@@ -31,7 +31,7 @@ jobs:
       version: ${{ steps.release.outputs.version }}
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🚀 Run add-on information action
         id: information
         uses: frenck/action-addon-information@v1.4.2
@@ -63,7 +63,7 @@ jobs:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🏗 Set up build cache
         id: cache
         uses: actions/cache@v3.3.2
@@ -162,7 +162,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🏗 Set up Docker Buildx
         uses: docker/setup-buildx-action@v2.10.0
       - name: 🚀 Create manifest
