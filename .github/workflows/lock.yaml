@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: dessant/lock-threads@v5.0.0
         with:
+          process-only: 'issues, prs'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-inactive-days: "30"
           issue-lock-reason: ""
