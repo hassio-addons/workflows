@@ -76,7 +76,7 @@ our [GitHub Repository][repository].
 
 MIT License
 
-Copyright (c) 2021-2022 Franck Nijhof
+Copyright (c) 2021-2024 Franck Nijhof
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -111,7 +111,7 @@ SOFTWARE.
 [github-sponsors]: https://github.com/sponsors/frenck
 [issue]: https://github.com/hassio-addons/workflows/issues
 [license-shield]: https://img.shields.io/github/license/hassio-addons/workflows.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [reddit]: https://reddit.com/r/homeassistant
