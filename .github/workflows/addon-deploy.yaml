@@ -88,7 +88,7 @@ jobs:
   deploy:
     name: 👷 Build & Deploy ${{ matrix.architecture }}
     needs: information
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.architecture in ['armhf', 'armv7', 'aarch64'] && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     strategy:
       matrix:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
@@ -124,10 +124,9 @@ jobs:
             echo "platform=linux/arm/v7" >> "$GITHUB_OUTPUT"
           elif [[ "${{ matrix.architecture }}" = "aarch64" ]]; then
             echo "platform=linux/arm64/v8" >> "$GITHUB_OUTPUT"
-          else
+          else:
             echo "::error ::Could not determine platform for architecture ${{ matrix.architecture }}"
             exit 1
-          fi
       - name: 🏗  Login to GitHub Container Registry
         uses: docker/login-action@v3.3.0
         with:

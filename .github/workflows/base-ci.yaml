@@ -106,7 +106,7 @@ jobs:
       - lint-prettier
       - lint-shellcheck
       - lint-yamllint
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.architecture in ['armhf', 'armv7', 'aarch64'] && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     strategy:
       matrix:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
