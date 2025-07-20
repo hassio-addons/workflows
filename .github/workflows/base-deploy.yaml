@@ -126,12 +126,28 @@ jobs:
             BUILD_REPOSITORY=${{ github.repository }}
             BUILD_VERSION=${{ needs.information.outputs.version }}
       - name: 🚀 Push
-        # yamllint disable rule:line-length
-        run: |
-          docker push \
-            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}"
-          docker push \
-            "ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}"
+        uses: docker/build-push-action@v6.18.0
+        with:
+          outputs: type=image,oci-mediatypes=true,compression=zstd,push=true
+          # yamllint disable rule:line-length
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
+          # yamllint enable rule:line-length
+          context: ${{ needs.information.outputs.target }}
+          file: ${{ needs.information.outputs.target }}/Dockerfile
+          cache-from: |
+            type=local,src=/tmp/.docker-cache
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
+          cache-to: type=local,mode=max,dest=/tmp/.docker-cache
+          platforms: ${{ steps.flags.outputs.platform }}
+          build-args: |
+            BUILD_ARCH=${{ matrix.architecture }}
+            BUILD_DATE=${{ steps.flags.outputs.date }}
+            BUILD_FROM=${{ steps.flags.outputs.from }}
+            BUILD_REF=${{ github.sha }}
+            BUILD_REPOSITORY=${{ github.repository }}
+            BUILD_VERSION=${{ needs.information.outputs.version }}
 
   manifest:
     name: 👷 Build & Deploy Multi Arch Manifest
