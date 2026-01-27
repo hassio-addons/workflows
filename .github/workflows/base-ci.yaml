@@ -129,6 +129,7 @@ jobs:
 
   dependency-review:
     name: Dependency review
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
@@ -142,7 +143,6 @@ jobs:
     name: Build ${{ matrix.architecture }}
     needs:
       - information
-      - dependency-review
       - lint-app
       - lint-hadolint
       - lint-json
