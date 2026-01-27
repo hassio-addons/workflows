@@ -21,8 +21,8 @@ jobs:
       actions: read
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
       - name: 🚀 Run zizmor
-        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95  # v0.4.1
+        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95 # v0.4.1

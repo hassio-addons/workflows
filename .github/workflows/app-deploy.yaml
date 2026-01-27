@@ -56,12 +56,12 @@ jobs:
       version: ${{ steps.release.outputs.version }}
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
       - name: 🚀 Run app information action
         id: information
-        uses: frenck/action-addon-information@ce1377e9851cf569c29329e65fb2c57e67ca0f69  # v1.4.2
+        uses: frenck/action-addon-information@ce1377e9851cf569c29329e65fb2c57e67ca0f69 # v1.4.2
       - name: 🚀 Process possible slug override
         id: override
         env:
@@ -105,11 +105,11 @@ jobs:
         architecture: ${{ fromJson(needs.information.outputs.architectures) }}
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
       - name: 🏗 Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # v3.12.0
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: ℹ️ Compose build flags
         id: flags
         env:
@@ -129,13 +129,13 @@ jobs:
             exit 1
           fi
       - name: 🏗  Login to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef  # v3.6.0
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 🚀 Build
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # v6.18.0
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           load: true
           # yamllint disable rule:line-length
@@ -181,9 +181,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # v3.12.0
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: 🏗  Login to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef  # v3.6.0
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -217,7 +217,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 Dispatch repository updater update signal
-        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697  # v4.0.1
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
           repository: ${{ github.repository_owner }}/${{ inputs.repository_edge }}
@@ -243,7 +243,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 Dispatch repository updater update signal
-        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697  # v4.0.1
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
           repository: ${{ github.repository_owner }}/${{ inputs.repository_beta }}
@@ -267,7 +267,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 Dispatch repository updater update signal
-        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697  # v4.0.1
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
           repository: ${{ github.repository_owner }}/${{ inputs.repository }}
