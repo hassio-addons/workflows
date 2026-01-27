@@ -8,17 +8,20 @@ on:
       UPDATER_TOKEN:
         required: true
 
+permissions:
+  contents: read
+
 concurrency:
   group: queue
 
 jobs:
   publish:
-    name: Publish add-on update
+    name: Publish app update
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 Run Repository Updater
-        uses: hassio-addons/repository-updater@v2.0.0
+        uses: hassio-addons/repository-updater@14898b0c7e7ae36eaf6e44f308765b8878d31177 # v2.0.0
         with:
-          addon: ${{ github.event.client_payload.addon }}
+          app: ${{ github.event.client_payload.app }}
           repository: ${{ github.repository }}
           token: ${{ secrets.UPDATER_TOKEN }}

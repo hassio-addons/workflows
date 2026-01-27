@@ -4,6 +4,11 @@ name: CI
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -20,7 +25,9 @@ jobs:
     outputs:
       architectures: ${{ steps.information.outputs.architectures }}
       build: ${{ steps.information.outputs.build }}
-      slug: ${{ steps.information.outputs.slug }}
+      description: ${{ steps.information.outputs.description }}
+      name: ${{ steps.information.outputs.name }}
+      slug: ${{ steps.override.outputs.slug }}
       target: ${{ steps.information.outputs.target }}
     steps:
       - name: ⤵️ Check out code from GitHub
@@ -30,6 +37,17 @@ jobs:
       - name: 🚀 Run app information action
         id: information
         uses: frenck/action-addon-information@ce1377e9851cf569c29329e65fb2c57e67ca0f69 # v1.4.2
+      - name: 🚀 Process possible slug override
+        id: override
+        env:
+          DETECTED_SLUG: ${{ steps.information.outputs.slug }}
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          slug="${DETECTED_SLUG}"
+          if [[ -n "${INPUT_SLUG}" ]]; then
+            slug="${INPUT_SLUG}"
+          fi
+          echo "slug=${slug}" >> "$GITHUB_OUTPUT"
 
   lint-app:
     name: Lint App
@@ -168,7 +186,9 @@ jobs:
           build-args: |
             BUILD_ARCH=${{ matrix.architecture }}
             BUILD_DATE=${{ steps.flags.outputs.date }}
+            BUILD_DESCRIPTION=${{ needs.information.outputs.description }}
             BUILD_FROM=${{ steps.flags.outputs.from }}
+            BUILD_NAME=${{ needs.information.outputs.name }}
             BUILD_REF=${{ github.sha }}
             BUILD_REPOSITORY=${{ github.repository }}
-            BUILD_VERSION=dev
+            BUILD_VERSION=edge

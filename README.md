@@ -1,4 +1,4 @@
-# Home Assistant Community Add-on: GitHub Action Workflows
+# Home Assistant Community App: GitHub Action Workflows
 
 [![License][license-shield]](LICENSE.md)
 [![GitHub Actions][github-actions-shield]][github-actions]
@@ -11,15 +11,15 @@
 
 [![Support Frenck on Patreon][patreon-shield]][patreon]
 
-GitHub Actions Workflows for the Home Assistant Community Add-ons
+GitHub Actions Workflows for the Home Assistant Community Apps
 
 ## About
 
 This repository contains GitHub Actions Workflows that are shared across
-the other Home Assistant Community Add-ons repositories.
+the other Home Assistant Community Apps repositories.
 
 It allows us to maintain all our workflows in a single place and reuse
-them across the Home Assistant Community Add-ons organization.
+them across the Home Assistant Community Apps organization.
 
 While these workflows are public, they are subjected to change and not
 versioned in terms of releases. Using them from this repository directly for
@@ -27,7 +27,7 @@ other project is possible, but not recommended for that reason.
 
 ## Changelog & Releases
 
-Unlike all other projects provided by the Home Assistant Community Add-ons
+Unlike all other projects provided by the Home Assistant Community Apps
 project, this repository isn't versioned (in terms of releases).
 
 If you want to see what has changed, please see the commit history of the
@@ -39,7 +39,7 @@ Got questions?
 
 You have several options to get them answered:
 
-- The [Home Assistant Community Add-ons Discord chat server][discord] for add-on
+- The [Home Assistant Community Apps Discord chat server][discord] for app
   support and feature requests.
 - The [Home Assistant Discord Chat Server][discord-ha] for general Home
   Assistant discussions and questions.
@@ -65,18 +65,18 @@ The original setup of this repository is by [Franck Nijhof][frenck].
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
 
-## We have got some Home Assistant add-ons for you
+## We have got some Home Assistant apps for you
 
 Want some more functionality to your Home Assistant instance?
 
-We have created multiple add-ons for Home Assistant. For a full list, check out
+We have created multiple apps for Home Assistant. For a full list, check out
 our [GitHub Repository][repository].
 
 ## License
 
 MIT License
 
-Copyright (c) 2021-2025 Franck Nijhof
+Copyright (c) 2021-2026 Franck Nijhof
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -111,7 +111,7 @@ SOFTWARE.
 [github-sponsors]: https://github.com/sponsors/frenck
 [issue]: https://github.com/hassio-addons/workflows/issues
 [license-shield]: https://img.shields.io/github/license/hassio-addons/workflows.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2025.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [reddit]: https://reddit.com/r/homeassistant
