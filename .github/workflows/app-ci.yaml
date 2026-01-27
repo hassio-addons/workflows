@@ -11,8 +11,10 @@ on:
         type: string
 
 permissions:
+  actions: read
   contents: read
   packages: read
+  security-events: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -132,6 +134,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  lint-zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: 🚀 Run zizmor
+        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95 # v0.4.1
+
   build:
     name: Build ${{ matrix.architecture }}
     needs:
@@ -142,6 +155,7 @@ jobs:
       - lint-prettier
       - lint-shellcheck
       - lint-yamllint
+      - lint-zizmor
     runs-on: ${{ matrix.architecture == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     strategy:
       matrix:
