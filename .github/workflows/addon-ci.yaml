@@ -1,1 +1,18 @@
-app-ci.yaml
+---
+# Backwards compatibility wrapper - use app-ci.yaml for new projects
+name: CI
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
+
+jobs:
+  ci:
+    uses: hassio-addons/workflows/.github/workflows/app-ci.yaml@main
+    with:
+      slug: ${{ inputs.slug }}

@@ -1,1 +1,41 @@
-app-deploy.yaml
+---
+# Backwards compatibility wrapper - use app-deploy.yaml for new projects
+name: Deploy
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
+      repository:
+        default: "repository"
+        description: The name of the stable repository
+        required: false
+        type: string
+      repository_edge:
+        default: "repository-edge"
+        description: The name of the edge repository
+        required: false
+        type: string
+      repository_beta:
+        default: "repository-beta"
+        description: The name of the beta repository
+        required: false
+        type: string
+    secrets:
+      DISPATCH_TOKEN:
+        required: true
+
+jobs:
+  deploy:
+    uses: hassio-addons/workflows/.github/workflows/app-deploy.yaml@main
+    with:
+      slug: ${{ inputs.slug }}
+      repository: ${{ inputs.repository }}
+      repository_edge: ${{ inputs.repository_edge }}
+      repository_beta: ${{ inputs.repository_beta }}
+    secrets:
+      DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
