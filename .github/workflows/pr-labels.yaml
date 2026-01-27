@@ -1,6 +1,7 @@
 ---
 name: PR Labels
 
+# zizmor: ignore[dangerous-triggers] - only has read permissions, no checkout
 # yamllint disable-line rule:truthy
 on:
   pull_request_target:
