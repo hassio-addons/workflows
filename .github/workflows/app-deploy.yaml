@@ -1,16 +1,39 @@
 ---
 name: Deploy
 
+concurrency:
+  group: queue
+
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
+    inputs:
+      slug:
+        description: Overrides the detected slug
+        required: false
+        type: string
+      repository:
+        default: "repository"
+        description: The name of the stable repository
+        required: false
+        type: string
+      repository_edge:
+        default: "repository-edge"
+        description: The name of the edge repository
+        required: false
+        type: string
+      repository_beta:
+        default: "repository-beta"
+        description: The name of the beta repository
+        required: false
+        type: string
+    secrets:
+      DISPATCH_TOKEN:
+        required: true
 
 permissions:
   contents: read
   packages: write
-
-concurrency:
-  group: queue
 
 jobs:
   information:
@@ -25,8 +48,10 @@ jobs:
     outputs:
       architectures: ${{ steps.information.outputs.architectures }}
       build: ${{ steps.information.outputs.build }}
+      description: ${{ steps.information.outputs.description }}
       environment: ${{ steps.release.outputs.environment }}
-      slug: ${{ steps.information.outputs.slug }}
+      name: ${{ steps.information.outputs.name }}
+      slug: ${{ steps.override.outputs.slug }}
       target: ${{ steps.information.outputs.target }}
       version: ${{ steps.release.outputs.version }}
     steps:
@@ -37,6 +62,17 @@ jobs:
       - name: 🚀 Run app information action
         id: information
         uses: frenck/action-addon-information@ce1377e9851cf569c29329e65fb2c57e67ca0f69 # v1.4.2
+      - name: 🚀 Process possible slug override
+        id: override
+        env:
+          DETECTED_SLUG: ${{ steps.information.outputs.slug }}
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          slug="${DETECTED_SLUG}"
+          if [[ -n "${INPUT_SLUG}" ]]; then
+            slug="${INPUT_SLUG}"
+          fi
+          echo "slug=${slug}" >> "$GITHUB_OUTPUT"
       - name: ℹ️ Gather version and environment
         id: release
         env:
@@ -117,7 +153,9 @@ jobs:
           build-args: |
             BUILD_ARCH=${{ matrix.architecture }}
             BUILD_DATE=${{ steps.flags.outputs.date }}
+            BUILD_DESCRIPTION=${{ needs.information.outputs.description }}
             BUILD_FROM=${{ steps.flags.outputs.from }}
+            BUILD_NAME=${{ needs.information.outputs.name }}
             BUILD_REF=${{ github.sha }}
             BUILD_REPOSITORY=${{ github.repository }}
             BUILD_VERSION=${{ needs.information.outputs.version }}
@@ -167,3 +205,77 @@ jobs:
             --tag "ghcr.io/${REPO_OWNER}/${SLUG}:${VERSION}" \
             "ghcr.io/${REPO_OWNER}/${SLUG}/amd64:${VERSION}" \
             "ghcr.io/${REPO_OWNER}/${SLUG}/aarch64:${VERSION}"
+
+  publish-edge:
+    name: 📢 Publish to edge repository
+    if: needs.information.outputs.environment == 'edge'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: ${{ needs.information.outputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/${{ inputs.repository_edge }}
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ needs.information.outputs.version }}"
+            }
+
+  publish-beta:
+    name: 📢 Publish to beta repository
+    if: |
+      needs.information.outputs.environment == 'beta' ||
+      needs.information.outputs.environment == 'stable'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: ${{ needs.information.outputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/${{ inputs.repository_beta }}
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ github.event.release.tag_name }}"
+            }
+
+  publish-stable:
+    name: 📢 Publish to stable repository
+    if: needs.information.outputs.environment == 'stable'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: ${{ needs.information.outputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/${{ inputs.repository }}
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ github.event.release.tag_name }}"
+            }
