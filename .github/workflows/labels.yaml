@@ -27,7 +27,7 @@ jobs:
             "https://raw.githubusercontent.com/hassio-addons/workflows/main/.github/labels.yml" \
             > labels.yml
       - name: 🚀 Run Label Syncer
-        uses: micnncim/action-label-syncer@3abd5ab72fda571e69fffd97bd4e0033dd5f495c # v1.3.0
+        uses: micnncim/action-label-syncer@3abd5ab72fda571e69fffd97bd4e0033dd5f495c  # v1.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
