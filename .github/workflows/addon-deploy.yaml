@@ -29,9 +29,13 @@ on:
       DISPATCH_TOKEN:
         required: true
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   deploy:
-    uses: hassio-addons/workflows/.github/workflows/app-deploy.yaml@main
+    uses: ./.github/workflows/app-deploy.yaml
     with:
       slug: ${{ inputs.slug }}
       repository: ${{ inputs.repository }}

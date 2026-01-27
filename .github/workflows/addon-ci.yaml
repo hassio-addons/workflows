@@ -11,8 +11,12 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   ci:
-    uses: hassio-addons/workflows/.github/workflows/app-ci.yaml@main
+    uses: ./.github/workflows/app-ci.yaml
     with:
       slug: ${{ inputs.slug }}
