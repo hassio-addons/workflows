@@ -4,6 +4,8 @@ name: Workflows CI
 # yamllint disable-line rule:truthy
 on:
   push:
+    branches:
+      - main
   pull_request:
     types:
       - opened
@@ -53,3 +55,18 @@ jobs:
           prettier_options: --check **/*.{json,js,md,yaml}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint-zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: 🚀 Run zizmor
+        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95 # v0.4.1
