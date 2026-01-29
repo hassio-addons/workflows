@@ -9,6 +9,7 @@ on:
       - labeled
       - unlabeled
       - synchronize
+  workflow_call:
 
 permissions: {}
 jobs:
