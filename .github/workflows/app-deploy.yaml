@@ -131,10 +131,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: 🚀 Build
+      - name: 🚀 Build and push
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
-          load: true
+          push: true
           # yamllint disable rule:line-length
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
@@ -157,19 +157,6 @@ jobs:
             BUILD_REF=${{ github.sha }}
             BUILD_REPOSITORY=${{ github.repository }}
             BUILD_VERSION=${{ needs.information.outputs.version }}
-      - name: 🚀 Push
-        env:
-          REPO_OWNER: ${{ github.repository_owner }}
-          SLUG: ${{ needs.information.outputs.slug }}
-          ARCHITECTURE: ${{ matrix.architecture }}
-          ENVIRONMENT: ${{ needs.information.outputs.environment }}
-          VERSION: ${{ needs.information.outputs.version }}
-        # yamllint disable rule:line-length
-        run: |
-          docker push \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/${ARCHITECTURE}:${ENVIRONMENT}"
-          docker push \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/${ARCHITECTURE}:${VERSION}"
 
   manifest:
     name: 👷 Build & Push Multi Arch Manifest
