@@ -192,17 +192,21 @@ jobs:
           SLUG: ${{ needs.information.outputs.slug }}
           ENVIRONMENT: ${{ needs.information.outputs.environment }}
           VERSION: ${{ needs.information.outputs.version }}
+          ARCHITECTURES: ${{ needs.information.outputs.architectures }}
         # yamllint disable rule:line-length
         run: |
+          sources=()
+          for arch in $(echo "${ARCHITECTURES}" | jq -r '.[]'); do
+            sources+=("ghcr.io/${REPO_OWNER}/${SLUG}/${arch}:${VERSION}")
+          done
+
           docker buildx imagetools create \
             --tag "ghcr.io/${REPO_OWNER}/${SLUG}:${ENVIRONMENT}" \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/amd64:${VERSION}" \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/aarch64:${VERSION}"
+            "${sources[@]}"
 
           docker buildx imagetools create \
             --tag "ghcr.io/${REPO_OWNER}/${SLUG}:${VERSION}" \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/amd64:${VERSION}" \
-            "ghcr.io/${REPO_OWNER}/${SLUG}/aarch64:${VERSION}"
+            "${sources[@]}"
 
   publish-edge:
     name: 📢 Publish to edge repository
