@@ -74,7 +74,7 @@ jobs:
           persist-credentials: false
       - name: 🚀 Run JQ
         run: |
-          shopt -s globstar
+          shopt -s globstar nullglob
           for file in **/*.json; do
             if ! jq '.' "$file" > /dev/null 2>&1; then
               echo "::error file=${file}::Invalid JSON in ${file}"
