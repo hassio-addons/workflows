@@ -20,7 +20,13 @@ jobs:
       - name: 🚀 Run JQ
         run: |
           shopt -s globstar
-          cat **/*.json | jq '.'
+          for file in **/*.json; do
+            if ! jq '.' "$file" > /dev/null 2>&1; then
+              echo "::error file=${file}::Invalid JSON in ${file}"
+              jq '.' "$file"
+              exit 1
+            fi
+          done
 
   yamllint:
     name: YAMLLint
