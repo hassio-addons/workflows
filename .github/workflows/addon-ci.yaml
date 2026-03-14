@@ -20,5 +20,11 @@ permissions:
 jobs:
   ci:
     uses: ./.github/workflows/app-ci.yaml
+    permissions:
+      actions: read
+      contents: write
+      packages: read
+      pull-requests: read
+      security-events: write
     with:
       slug: ${{ inputs.slug }}
