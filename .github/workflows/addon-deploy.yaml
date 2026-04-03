@@ -41,5 +41,8 @@ jobs:
       repository: ${{ inputs.repository }}
       repository_edge: ${{ inputs.repository_edge }}
       repository_beta: ${{ inputs.repository_beta }}
+    permissions:
+      contents: read
+      packages: write
     secrets:
       DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
