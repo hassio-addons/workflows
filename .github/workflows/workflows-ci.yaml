@@ -70,19 +70,3 @@ jobs:
           persist-credentials: false
       - name: 🚀 Run zizmor
         uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
-
-  update_release_draft:
-    name: Draft release
-    needs:
-      - lint-shellcheck
-      - lint-yamllint
-      - lint-prettier
-      - lint-zizmor
-    if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: read
-    steps:
-      - name: 🚀 Run Release Drafter
-        uses: release-drafter/release-drafter@c2e2804cc59f45f57076a99af580d0fedb697927 # v7.3.0
