@@ -111,6 +111,10 @@ jobs:
           persist-credentials: false
       - name: 🚀 Run Shellcheck
         uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 # 2.0.0
+        with:
+          # S6 service scripts are extensionless and use a `bashio` shebang,
+          # which the action's own discovery does not recognise as shell.
+          additional_files: run finish healthcheck
         env:
           SHELLCHECK_OPTS: -s bash
 
