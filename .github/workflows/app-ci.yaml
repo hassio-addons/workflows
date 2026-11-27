@@ -62,7 +62,7 @@ jobs:
         with:
           persist-credentials: false
       - name: 🚀 Run App Lint
-        uses: frenck/action-app-linter@d51677290aef26cdfc835271dd3c7343ce502809 # v2.21.2
+        uses: frenck/action-app-linter@479f4f053b96ed00a83ce2c7d8f858e22475aa98 # v2.21.3
         with:
           community: true
           path: "./${{ needs.information.outputs.target }}"
